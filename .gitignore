@@ -34,3 +34,6 @@ Thumbs.db
 *.tar.gz
 *.bak
 *.swp
+
+services/auth-service/.env
+.env
