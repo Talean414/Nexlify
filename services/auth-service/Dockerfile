@@ -1,19 +1,22 @@
 FROM node:18-alpine
 
-# Install pnpm globally
+# Install pnpm
 RUN npm install -g pnpm
 
-# Set working directory
+# Create app dir
 WORKDIR /app
 
-# Copy all files to container
-COPY . .
+# Copy the WHOLE monorepo
+COPY ../../ ./
 
-# Install dependencies using pnpm
+# Go into the auth service directory
+WORKDIR /app/services/auth
+
+# Install dependencies for this service
 RUN pnpm install
 
-# Expose the dev port (adjust if yours is different)
+# Expose the port
 EXPOSE 5002
 
-# Start the dev script
+# Start in dev mode
 CMD ["pnpm", "dev"]

@@ -1,18 +1,16 @@
 import express from 'express';
-import { createProxyMiddleware, Options } from 'http-proxy-middleware';
-import { Request } from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import type { Request } from 'express';
+import type { ProxyReqCallback } from 'http-proxy';
 
 const router = express.Router();
 
-const modifyRequestBody: Options['onProxyReq'] = (proxyReq, req: Request) => {
+const modifyRequestBody: ProxyReqCallback = (proxyReq, req: Request) => {
   if (req.body && Object.keys(req.body).length) {
     const bodyData = JSON.stringify(req.body);
 
-    // Update the headers to indicate content length & type
     proxyReq.setHeader('Content-Type', 'application/json');
     proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
-
-    // Write the new body to the proxy request
     proxyReq.write(bodyData);
   }
 };
