@@ -2,6 +2,8 @@ services:
   - name: auth-service
     type: web
     env: docker
-    rootDir: .
-    dockerfilePath: services/auth/Dockerfile
     plan: free
+    repo: https://github.com/Talean414/Nexlify
+    branch: main
+    rootDir: .
+    dockerfilePath: services/auth-service/Dockerfile
