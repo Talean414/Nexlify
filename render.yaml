@@ -1,0 +1,7 @@
+services:
+  - name: auth-service
+    type: web
+    env: docker
+    rootDir: .
+    dockerfilePath: services/auth/Dockerfile
+    plan: free
