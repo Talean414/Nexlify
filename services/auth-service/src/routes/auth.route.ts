@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction, RequestHandler } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "@shared/utils/auth/requireAuth";
 import * as authController from "../controllers/auth.controller";
 import passport from "passport";
@@ -10,11 +10,7 @@ import { authMiddleware } from "../controllers/auth.controller";
 const router = Router();
 
 // Middleware to add correlation ID
-router.use((
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {
+router.use((req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   req.correlationId = uuidv4();
   logger.debug({
     context: "auth.route",
@@ -24,7 +20,7 @@ router.use((
     correlationId: req.correlationId,
   });
   next();
-} as unknown as RequestHandler);
+});
 
 /**
  * @route POST /api/auth/signup
@@ -88,7 +84,7 @@ router.get(
 /**
  * @route GET /api/auth/google/callback
  * @desc Google OAuth callback
- * @ personally
+ * @access Public
  */
 router.get(
   "/google/callback",
