@@ -1,0 +1,32 @@
+{
+  "name": "customer-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+    "next": "^14.1.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "next-intl": "^4.3.4"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.21",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.55.0",
+    "typescript": "^5.2.0",
+    "@types/react": "^19.1.8",
+    "eslint-plugin-formatjs": "^5.4.0"
+  }
+}

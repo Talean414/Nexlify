@@ -1,4 +1,4 @@
-import { Router, Response, NextFunction, RequestHandler } from "express";
+import { Router, Request, Response, NextFunction, RequestHandler } from "express";
 import { AuthenticatedRequest } from "@shared/utils/auth/requireAuth";
 import * as authController from "../controllers/auth.controller";
 import passport from "passport";
@@ -10,7 +10,7 @@ import { authMiddleware } from "../controllers/auth.controller";
 const router = Router();
 
 // Middleware to add correlation ID
-router.use(((
+router.use((
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
@@ -24,56 +24,56 @@ router.use(((
     correlationId: req.correlationId,
   });
   next();
-}) as RequestHandler);
+} as unknown as RequestHandler);
 
 /**
  * @route POST /api/auth/signup
  * @desc Register a new user
  * @access Public
  */
-router.post("/signup", authMiddleware.validateSignup, authController.signup as RequestHandler);
+router.post("/signup", authMiddleware.validateSignup, authController.signup as unknown as RequestHandler);
 
 /**
  * @route POST /api/auth/login
  * @desc Login a user and initiate 2FA
  * @access Public
  */
-router.post("/login", authMiddleware.validateLogin, authController.login as RequestHandler);
+router.post("/login", authMiddleware.validateLogin, authController.login as unknown as RequestHandler);
 
 /**
  * @route POST /api/auth/verify-2fa
  * @desc Verify 2FA code and issue tokens
  * @access Public
  */
-router.post("/verify-2fa", authMiddleware.validate2FA, authController.verify2FA as RequestHandler);
+router.post("/verify-2fa", authMiddleware.validate2FA, authController.verify2FA as unknown as RequestHandler);
 
 /**
  * @route POST /api/auth/refresh
  * @desc Refresh access token
  * @access Public
  */
-router.post("/refresh", authMiddleware.validateRefreshToken, authController.refreshToken as RequestHandler);
+router.post("/refresh", authMiddleware.validateRefreshToken, authController.refreshToken as unknown as RequestHandler);
 
 /**
  * @route POST /api/auth/logout
  * @desc Logout from a device
  * @access Authenticated
  */
-router.post("/logout", requireAuth, authController.logout as RequestHandler);
+router.post("/logout", requireAuth as unknown as RequestHandler, authController.logout as unknown as RequestHandler);
 
 /**
  * @route POST /api/auth/logout-all
  * @desc Logout from all devices
  * @access Authenticated
  */
-router.post("/logout-all", requireAuth, authController.logoutAll as RequestHandler);
+router.post("/logout-all", requireAuth as unknown as RequestHandler, authController.logoutAll as unknown as RequestHandler);
 
 /**
  * @route POST /api/auth/request-password-reset
  * @desc Request a password reset link
  * @access Public
  */
-router.post("/request-password-reset", authController.requestPasswordReset as RequestHandler);
+router.post("/request-password-reset", authController.requestPasswordReset as unknown as RequestHandler);
 
 /**
  * @route GET /api/auth/google
@@ -82,18 +82,18 @@ router.post("/request-password-reset", authController.requestPasswordReset as Re
  */
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }) as RequestHandler
+  passport.authenticate("google", { scope: ["profile", "email"] }) as unknown as RequestHandler
 );
 
 /**
  * @route GET /api/auth/google/callback
  * @desc Google OAuth callback
- * @access Public
+ * @ personally
  */
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login-failed" }) as RequestHandler,
-  authController.googleCallback as RequestHandler
+  passport.authenticate("google", { failureRedirect: "/login-failed" }) as unknown as RequestHandler,
+  authController.googleCallback as unknown as RequestHandler
 );
 
 /**
@@ -103,8 +103,8 @@ router.get(
  */
 router.patch(
   "/users/:id",
-  requireAuth,
-  requireRole(["admin"]),
+  requireAuth as unknown as RequestHandler,
+  requireRole(["admin"]) as unknown as RequestHandler,
   authMiddleware.validateSignup,
   (async (
     req: AuthenticatedRequest,
@@ -140,7 +140,7 @@ router.patch(
         details: process.env.NODE_ENV === "development" ? error.details : undefined,
       });
     }
-  }) as RequestHandler
+  }) as unknown as RequestHandler
 );
 
 export default router;
