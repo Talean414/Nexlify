@@ -1,0 +1,132 @@
+[2025-07-04 09:44:21] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-04 09:44:21] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-04 09:47:07] DEBUG [06a350d1-d58e-43b3-b4e4-1216ef1323e9]: Request received {
+  "context": "route",
+  "method": "POST",
+  "url": "/"
+}
+[2025-07-05 05:46:29] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-05 05:46:29] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-06 18:00:42] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "courierServicePort": "5002"
+}
+[2025-07-06 18:00:42] INFO [unknown]: Courier Service running on port 5002 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-06 18:00:42] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:42] ERROR [unknown]: Database connection failed {
+  "context": "db",
+  "error": "no PostgreSQL user name specified in startup packet"
+}
+[2025-07-06 18:00:42] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:42] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:42] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:43] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:43] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:43] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:43] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:44] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:44] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:45] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:45] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:46] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:47] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:47] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:48] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:49] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:50] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:51] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:52] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:52] ERROR [unknown]: Failed to initialize Kafka {
+  "context": "main",
+  "error": "Connection error: connect ECONNREFUSED 127.0.0.1:9092"
+}
+[2025-07-06 18:00:53] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}
+[2025-07-06 18:00:54] ERROR [unknown]: Redis connection failed {
+  "context": "redis",
+  "error": "connect ECONNREFUSED 127.0.0.1:6379"
+}

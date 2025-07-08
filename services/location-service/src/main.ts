@@ -75,7 +75,7 @@ app.use((err: Error, req: any, res: any, next: any) => {
   res.status(500).json({ success: false, error: 'Internal server error' });
 });
 
-const PORT = process.env.PORT || 5008;
+const PORT = process.env.PORT || 5004;
 server.listen(PORT, () => {
   logger.info(`Location service running on port ${PORT}`);
 });

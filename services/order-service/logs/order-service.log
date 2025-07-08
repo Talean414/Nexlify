@@ -1,0 +1,35 @@
+[2025-07-04 09:44:21] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-04 09:44:21] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-04 09:47:07] DEBUG [06a350d1-d58e-43b3-b4e4-1216ef1323e9]: Request received {
+  "context": "route",
+  "method": "POST",
+  "url": "/"
+}
+[2025-07-05 05:46:29] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-05 05:46:29] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-06 18:00:39] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-06 18:00:39] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}

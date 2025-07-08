@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["*"],
+      "@email/*": ["utils/email/*"],
+      "@sms/*": ["utils/sms/*"]
+    },
+    "typeRoots": ["./types", "../node_modules/@types"]
+  },
+  "include": ["**/*", "types/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,15 @@
+[2025-07-06 18:00:40] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-06 18:00:40] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-06 18:00:40] INFO [unknown]: Auth service running on http://localhost:5001 {
+  "context": "main",
+  "environment": "development"
+}

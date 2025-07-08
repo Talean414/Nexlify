@@ -8,9 +8,10 @@ export const sendEmailNotification = async (req: Request, res: Response) => {
   try {
     const info = await sendEmail(to, subject, message);
     res.status(200).json({ success: true, info });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
+  } catch (err: unknown) {
+  const error = err as Error;
+  res.status(500).json({ success: false, error: error.message });
+}
 };
 
 export const sendSMSNotification = async (req: Request, res: Response) => {
@@ -18,7 +19,8 @@ export const sendSMSNotification = async (req: Request, res: Response) => {
   try {
     const info = await sendSMS(to, message);
     res.status(200).json({ success: true, info });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
+  } catch (err: unknown) {
+  const error = err as Error;
+  res.status(500).json({ success: false, error: error.message });
+}
 };

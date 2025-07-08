@@ -1,1 +1,11 @@
-{"name": "nexlify", "version": "1.0.0", "private": true}
+{
+  "name": "nexlify",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:all": "ts-node dev/run-all.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}

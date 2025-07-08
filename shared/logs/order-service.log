@@ -1,0 +1,5 @@
+[2025-07-04 09:47:07] DEBUG [06a350d1-d58e-43b3-b4e4-1216ef1323e9]: User authenticated {
+  "context": "requireAuth",
+  "userId": "20e03454-1628-4d34-ad18-2c0aa8e1a359"
+}
+[2025-07-04 09:47:07] ERROR [unknown]: [object Object] 

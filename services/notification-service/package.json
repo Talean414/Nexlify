@@ -28,9 +28,11 @@
     "twilio": "^5.7.1"
   },
   "devDependencies": {
+    "@types/africastalking": "^0.6.2",
     "@types/axios": "^0.14.4",
     "@types/body-parser": "^1.19.6",
     "@types/cors": "^2.8.19",
+    "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.3",
     "@types/helmet": "^4.0.0",
     "@types/morgan": "^1.9.10",

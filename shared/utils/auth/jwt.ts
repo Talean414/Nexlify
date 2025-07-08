@@ -1,32 +1,112 @@
-import { config } from 'dotenv';
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
+import { logger } from "../logging/logger";
 
-// Load environment variables
-config();
-
-// Fetch and validate environment variables
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
-
-if (!ACCESS_TOKEN_SECRET) {
-  throw new Error('ACCESS_TOKEN_SECRET environment variable is not set');
-}
-if (!REFRESH_TOKEN_SECRET) {
-  throw new Error('REFRESH_TOKEN_SECRET environment variable is not set');
+export interface JwtPayload {
+  userId: string;
+  email?: string;
+  role?: "customer" | "vendor" | "courier" | "admin";
 }
 
-export function generateAccessToken(userId: string) {
-  return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
+export function signAccessToken(payload: JwtPayload): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    const error = new Error("JWT_SECRET not set in environment");
+    logger.error({
+      context: "jwt.signAccessToken",
+      error: error.message,
+      errorCode: "CONFIG_ERROR",
+      details: "Ensure JWT_SECRET is set in the service's .env file"
+    });
+    throw error;
+  }
+  return jwt.sign(payload, secret, { expiresIn: "30m" });
 }
 
-export function generateRefreshToken(userId: string) {
-  return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+export function signRefreshToken(payload: Pick<JwtPayload, "userId">): string {
+  const secret = process.env.REFRESH_TOKEN_SECRET;
+  if (!secret) {
+    const error = new Error("REFRESH_TOKEN_SECRET not set in environment");
+    logger.error({
+      context: "jwt.signRefreshToken",
+      error: error.message,
+      errorCode: "CONFIG_ERROR",
+      details: "Ensure REFRESH_TOKEN_SECRET is set in the service's .env file"
+    });
+    throw error;
+  }
+  return jwt.sign(payload, secret, { expiresIn: "7d" });
 }
 
-export function verifyAccessToken(token: string) {
-  return jwt.verify(token, ACCESS_TOKEN_SECRET);
+export function verifyAccessToken(token: string): JwtPayload {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    const error = new Error("JWT_SECRET not set in environment");
+    logger.error({
+      context: "jwt.verifyAccessToken",
+      error: error.message,
+      errorCode: "CONFIG_ERROR",
+      details: "Ensure JWT_SECRET is set in the service's .env file"
+    });
+    throw error;
+  }
+  try {
+    return jwt.verify(token, secret) as JwtPayload;
+  } catch (err: any) {
+    logger.error({
+      context: "jwt.verifyAccessToken",
+      error: err.message,
+      errorCode: "TOKEN_VERIFICATION_FAILED",
+      details: `Token: ${token.substring(0, 10)}...`
+    });
+    throw new Error("Invalid or expired token");
+  }
 }
 
-export function verifyRefreshToken(token: string) {
-  return jwt.verify(token, REFRESH_TOKEN_SECRET);
+export function verifyRefreshToken(token: string): JwtPayload {
+  const secret = process.env.REFRESH_TOKEN_SECRET;
+  if (!secret) {
+    const error = new Error("REFRESH_TOKEN_SECRET not set in environment");
+    logger.error({
+      context: "jwt.verifyRefreshToken",
+      error: error.message,
+      errorCode: "CONFIG_ERROR",
+      details: "Ensure REFRESH_TOKEN_SECRET is set in the service's .env file"
+    });
+    throw error;
+  }
+  try {
+    return jwt.verify(token, secret) as JwtPayload;
+  } catch (err: any) {
+    logger.error({
+      context: "jwt.verifyRefreshToken",
+      error: err.message,
+      errorCode: "TOKEN_VERIFICATION_FAILED",
+      details: `Token: ${token.substring(0, 10)}...`
+    });
+    throw new Error("Invalid or expired refresh token");
+  }
+}
+
+export function getUserFromRequest(req: any): JwtPayload | null {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
+  if (!token) {
+    logger.debug({
+      context: "jwt.getUserFromRequest",
+      message: "No token provided in Authorization header"
+    });
+    return null;
+  }
+
+  try {
+    return verifyAccessToken(token);
+  } catch (err: any) {
+    logger.error({
+      context: "jwt.getUserFromRequest",
+      error: err.message,
+      errorCode: "TOKEN_VERIFICATION_FAILED",
+      details: `Token: ${token.substring(0, 10)}...`
+    });
+    return null;
+  }
 }

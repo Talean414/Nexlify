@@ -1,111 +1,408 @@
-import { Request, Response } from 'express';
-import * as authService from '../services/auth.service';
-import jwt from 'jsonwebtoken';
+import { Response, NextFunction } from "express";
+import { body, validationResult, ValidationError } from "express-validator";
+import jwt from "jsonwebtoken";
+import { AuthenticatedRequest } from "@shared/utils/auth/requireAuth";
+import * as authService from "../services/auth.service";
+import { logger } from "../utils/logger";
 
-export async function signup(req: Request, res: Response) {
-  try {
-    const { email, password } = req.body;
-    const user = await authService.registerUser(email, password);
-    res.status(201).json({ msg: 'User registered', user });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+interface SuccessResponse<T = any> {
+  success: true;
+  message?: string;
+  data?: T;
+}
+
+interface ErrorResponse {
+  success: false;
+  error: string;
+  errorCode: string;
+  details?: string;
+}
+
+class ApiError extends Error {
+  constructor(
+    public status: number,
+    public error: string,
+    public errorCode: string,
+    public details?: string
+  ) {
+    super(error);
   }
 }
 
-export async function login(req: Request, res: Response) {
+const validateSignup = [
+  body("id").optional().isUUID().withMessage("ID must be a valid UUID"),
+  body("email").isEmail().withMessage("Valid email is required"),
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters"),
+  body("role")
+    .optional()
+    .isIn(["customer", "vendor", "courier", "admin"])
+    .withMessage("Invalid role"),
+];
+
+const validateLogin = [
+  body("email").isEmail().withMessage("Valid email is required"),
+  body("password").notEmpty().withMessage("Password is required"),
+];
+
+const validate2FA = [
+  body("code")
+    .isString()
+    .isLength({ min: 6, max: 6 })
+    .withMessage("2FA code must be 6 digits"),
+  body("tempToken").notEmpty().withMessage("Temporary token is required"),
+];
+
+const validateRefreshToken = [
+  body("token").notEmpty().withMessage("Refresh token is required"),
+];
+
+export async function signup(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
-    const { email, password } = req.body;
-    const data = await authService.loginUser(email, password);
-    res.json(data);
-  } catch (err) {
-    res.status(401).json({ error: err.message });
-  }
-}
-
-export async function refreshToken(req: Request, res: Response) {
-  try {
-    const { token } = req.body;
-    const data = await authService.refreshAuthToken(token);
-    res.json(data);
-  } catch (err) {
-    res.status(401).json({ error: err.message });
-  }
-}
-
-export async function logout(req: Request, res: Response) {
-  try {
-    const { userId, refreshToken } = req.body;
-    await authService.logoutDevice(userId, refreshToken);
-    res.json({ msg: 'Logged out from current device' });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-}
-
-export async function logoutAll(req: Request, res: Response) {
-  try {
-    const { userId } = req.body;
-    await authService.logoutAllDevices(userId);
-    res.json({ msg: 'Logged out from all devices' });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-}
-
-export async function verify2FA(req: Request, res: Response) {
-  try {
-    const { code, tempToken, deviceInfo = 'unknown' } = req.body;
-
-    const payload = (await new Promise((resolve, reject) => {
-      const secret = process.env.JWT_SECRET || 'your-secret-key';
-      jwt.verify(tempToken, secret, (err, decoded) => {
-        if (err) return reject(err);
-        resolve(decoded);
-      });
-    })) as { userId: string; type: string };
-
-    if (payload.type !== '2fa') {
-      return res.status(401).json({ error: 'Invalid token type' });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ApiError(
+        400,
+        "Invalid input",
+        "INVALID_INPUT",
+        errors.array().map((e: ValidationError) => e.msg).join(", ")
+      );
     }
 
-    const tokens = await authService.verify2FA(payload.userId, code, deviceInfo);
-    const user = { id: payload.userId };
-
-    res.json({
-      message: '2FA verified successfully',
-      user,
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
+    const { id, email, password, role = "customer" } = req.body;
+    const result = await authService.registerUser(
+      id,
+      email,
+      password,
+      role,
+      req.correlationId
+    );
+    logger.info({
+      context: "authController.signup",
+      message: "User registered",
+      userId: result.data.id,
+      correlationId: req.correlationId,
     });
-  } catch (err) {
-    res.status(401).json({ error: err.message });
+    return res.status(201).json(result as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(500, "Failed to register user", "INTERNAL_SERVER_ERROR", err.message);
+    logger.error({
+      context: "authController.signup",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
   }
 }
 
-export async function googleCallback(req: Request, res: Response) {
-  const user = req.user as any;
+export async function login(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ApiError(
+        400,
+        "Invalid input",
+        "INVALID_INPUT",
+        errors.array().map((e: ValidationError) => e.msg).join(", ")
+      );
+    }
 
-  // Optionally, initiate 2FA for extra layer
-  await authService.initiate2FA(user.id);
-
-  // Generate temp token to proceed to 2FA verification
-  const tempToken = jwt.sign({ userId: user.id, type: '2fa' }, process.env.JWT_SECRET!, {
-    expiresIn: '10m',
-  });
-
-  return res.json({
-    msg: 'Google login successful. 2FA code sent.',
-    tempToken,
-    user: { id: user.id, email: user.email },
-  });
+    const { email, password, deviceInfo } = req.body;
+    const result = await authService.loginUser(
+      email,
+      password,
+      deviceInfo,
+      req.correlationId
+    );
+    logger.info({
+      context: "authController.login",
+      message: "Login initiated",
+      userId: result.data.user.id,
+      correlationId: req.correlationId,
+    });
+    return res.json(result as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(401, "Failed to login", "AUTH_FAILED", err.message);
+    logger.error({
+      context: "authController.login",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
+  }
 }
 
-export async function requestPasswordReset(req: Request, res: Response) {
+export async function verify2FA(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ApiError(
+        400,
+        "Invalid input",
+        "INVALID_INPUT",
+        errors.array().map((e: ValidationError) => e.msg).join(", ")
+      );
+    }
+
+    const { code, tempToken, deviceInfo = "unknown" } = req.body;
+    const payload = jwt.verify(tempToken, process.env.JWT_SECRET!) as {
+      userId: string;
+      type: string;
+    };
+
+    if (payload.type !== "2fa") {
+      throw new ApiError(401, "Invalid token type", "INVALID_TOKEN");
+    }
+
+    const result = await authService.verify2FA(
+      payload.userId,
+      code,
+      deviceInfo,
+      req.correlationId
+    );
+    logger.info({
+      context: "authController.verify2FA",
+      message: "2FA verified",
+      userId: payload.userId,
+      correlationId: req.correlationId,
+    });
+    return res.json({
+      success: true,
+      message: "2FA verified successfully",
+      data: {
+        user: { id: payload.userId },
+        accessToken: result.data.accessToken,
+        refreshToken: result.data.refreshToken,
+      },
+    } as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(401, "Failed to verify 2FA", "AUTH_FAILED", err.message);
+    logger.error({
+      context: "authController.verify2FA",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
+  }
+}
+
+export async function refreshToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ApiError(
+        400,
+        "Invalid input",
+        "INVALID_INPUT",
+        errors.array().map((e: ValidationError) => e.msg).join(", ")
+      );
+    }
+
+    const { token } = req.body;
+    const result = await authService.refreshAuthToken(token, req.correlationId);
+    logger.info({
+      context: "authController.refreshToken",
+      message: "Token refreshed",
+      correlationId: req.correlationId,
+    });
+    return res.json(result as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(401, "Failed to refresh token", "AUTH_FAILED", err.message);
+    logger.error({
+      context: "authController.refreshToken",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
+  }
+}
+
+export async function logout(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const { userId, refreshToken } = req.body;
+    await authService.logoutDevice(userId, refreshToken, req.correlationId);
+    logger.info({
+      context: "authController.logout",
+      message: "Logged out from device",
+      userId,
+      correlationId: req.correlationId,
+    });
+    return res.json({
+      success: true,
+      message: "Logged out from current device",
+    } as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(400, "Failed to logout", "AUTH_FAILED", err.message);
+    logger.error({
+      context: "authController.logout",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
+  }
+}
+
+export async function logoutAll(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req.body;
+    await authService.logoutAllDevices(userId, req.correlationId);
+    logger.info({
+      context: "authController.logoutAll",
+      message: "Logged out from all devices",
+      userId,
+      correlationId: req.correlationId,
+    });
+    return res.json({
+      success: true,
+      message: "Logged out from all devices",
+    } as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(400, "Failed to logout all devices", "AUTH_FAILED", err.message);
+    logger.error({
+      context: "authController.logoutAll",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
+  }
+}
+
+export async function requestPasswordReset(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { email } = req.body;
-    await authService.requestPasswordReset(email);
-    res.json({ msg: 'If the email is valid, a reset link has been sent.' });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    await authService.requestPasswordReset(email, req.correlationId);
+    logger.info({
+      context: "authController.requestPasswordReset",
+      message: "Password reset requested",
+      email,
+      correlationId: req.correlationId,
+    });
+    return res.json({
+      success: true,
+      message: "If the email is valid, a reset link has been sent.",
+    } as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(400, "Failed to request password reset", "INVALID_INPUT", err.message);
+    logger.error({
+      context: "authController.requestPasswordReset",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
   }
 }
+
+export async function googleCallback(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const user = req.user as { userId: string; email: string; role?: string }; // Align with AuthenticatedRequest
+    await authService.initiate2FA(user.userId, req.correlationId);
+    const tempToken = jwt.sign(
+      { userId: user.userId, type: "2fa", role: user.role },
+      process.env.JWT_SECRET!,
+      { expiresIn: "10m" }
+    );
+
+    logger.info({
+      context: "authController.googleCallback",
+      message: "Google login successful",
+      userId: user.userId,
+      correlationId: req.correlationId,
+    });
+    return res.json({
+      success: true,
+      message: "Google login successful. 2FA code sent.",
+      data: {
+        tempToken,
+        user: { id: user.userId, email: user.email },
+      },
+    } as SuccessResponse);
+  } catch (err: any) {
+    const error = err instanceof ApiError
+      ? err
+      : new ApiError(500, "Failed to process Google login", "INTERNAL_SERVER_ERROR", err.message);
+    logger.error({
+      context: "authController.googleCallback",
+      error: error.error,
+      errorCode: error.errorCode,
+      details: error.details,
+      correlationId: req.correlationId,
+    });
+    return res.status(error.status).json({
+      success: false,
+      error: error.error,
+      errorCode: error.errorCode,
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
+    } as ErrorResponse);
+  }
+}
+
+export const authMiddleware = {
+  validateSignup,
+  validateLogin,
+  validate2FA,
+  validateRefreshToken,
+};

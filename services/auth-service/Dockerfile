@@ -1,23 +1,22 @@
-# Base image
 FROM node:18-alpine
 
-# Set up PNPM
+# Install pnpm
 RUN npm install -g pnpm
 
-# Create app directory in container
+# Create app dir
 WORKDIR /app
 
-# Copy entire monorepo from build context (Render uses monorepo root as context)
-COPY . .
+# Copy the WHOLE monorepo
+COPY ../../ ./
 
-# Set working directory inside the container to the service root
-WORKDIR /app/services/auth-service
+# Go into the auth service directory
+WORKDIR /app/services/auth
 
-# Install dependencies for just this service
+# Install dependencies for this service
 RUN pnpm install
 
-# Expose service port (adjust if using .env)
+# Expose the port
 EXPOSE 5002
 
-# Start the service
+# Start in dev mode
 CMD ["pnpm", "dev"]

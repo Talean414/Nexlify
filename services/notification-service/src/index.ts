@@ -12,7 +12,7 @@ connectDB();
 
 app.use("/api/notification", notificationRoutes);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5005;
 app.listen(PORT, () => {
   console.log(`✅ Notification service running on port ${PORT}`);
 });
