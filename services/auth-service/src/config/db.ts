@@ -1,11 +1,11 @@
+// config/db.ts
 import { config as dotenvConfig } from 'dotenv';
-import { Knex } from 'knex';
+import knex, { Knex } from 'knex';
 import winston from 'winston';
+import knexConfig from './knexfile';
 
-// Load environment variables from .env
 dotenvConfig();
 
-// Configure Winston logger
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -20,7 +20,7 @@ const logger = winston.createLogger({
 
 let db: Knex;
 
-// Define Knex configuration type
+// Define Knex connection types for reuse
 interface KnexConnectionConfig {
   host: string;
   user: string;
@@ -42,34 +42,39 @@ interface KnexConfig {
   };
 }
 
-// Connect to the database
 export async function connectDB() {
   try {
-    const knexConfig: KnexConfig = require('./knexfile'); // Explicitly import
-    if (!knexConfig.development.connection) {
-      throw new Error('Database connection configuration is missing');
+    const env = process.env.NODE_ENV || 'development';
+    const selectedConfig = (knexConfig as KnexConfig)[env];
+
+    if (!selectedConfig?.connection) {
+      throw new Error(`Database connection configuration for '${env}' is missing`);
     }
 
-    db = require('knex')(knexConfig.development);
+    db = knex(selectedConfig);
     await db.raw('SELECT 1+1 AS result');
+
     logger.info('✅ Database connection successful', {
-      database: (knexConfig.development.connection as KnexConnectionConfig).database,
-      host: (knexConfig.development.connection as KnexConnectionConfig).host,
-      user: (knexConfig.development.connection as KnexConnectionConfig).user,
+      environment: env,
+      database: selectedConfig.connection.database,
+      host: selectedConfig.connection.host,
+      user: selectedConfig.connection.user,
     });
+
     return db;
+
   } catch (err: any) {
+    console.error('❌ Database connection error:', err);
+
     logger.error('❌ Database connection failed', {
       error: err.message,
-      database: (knexConfig.development?.connection as KnexConnectionConfig | undefined)?.database,
-      host: (knexConfig.development?.connection as KnexConnectionConfig | undefined)?.host,
-      user: (knexConfig.development?.connection as KnexConnectionConfig | undefined)?.user,
+      stack: err.stack,
     });
+
     throw new Error(`Failed to connect to database: ${err.message}`);
   }
 }
 
-// Get the database instance
 export function getDB() {
   if (!db) {
     logger.error('⚠️ Database not connected yet');

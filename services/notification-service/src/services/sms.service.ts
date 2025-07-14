@@ -1,5 +1,7 @@
 import AfricasTalking from "africastalking";
 import dotenv from "dotenv";
+import { logger } from "../utils/logger";
+
 dotenv.config();
 
 const at = AfricasTalking({
@@ -13,10 +15,19 @@ const sms = at.SMS;
 export const sendSMS = async (to: string, message: string) => {
   try {
     const result = await sms.send({ to, message });
-    console.log("✅ Africa's Talking SMS:", result);
+    logger.info({
+      context: "smsService.sendSMS",
+      message: "SMS sent successfully",
+      to,
+    });
     return result;
   } catch (err: any) {
-    console.error("❌ Africa's Talking Error:", err);
+    logger.error({
+      context: "smsService.sendSMS",
+      error: err.message,
+      details: err.stack,
+      to,
+    });
     throw err;
   }
 };

@@ -1,4 +1,4 @@
-import { Response, NextFunction } from "express";
+import { RequestHandler, Response, NextFunction } from "express";
 import { body, validationResult, ValidationError } from "express-validator";
 import jwt from "jsonwebtoken";
 import { AuthenticatedRequest } from "@shared/utils/auth/requireAuth";
@@ -18,7 +18,7 @@ interface ErrorResponse {
   details?: string;
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   constructor(
     public status: number,
     public error: string,
@@ -26,10 +26,11 @@ class ApiError extends Error {
     public details?: string
   ) {
     super(error);
+    this.name = "ApiError";
   }
 }
 
-const validateSignup = [
+export const validateSignup = [
   body("id").optional().isUUID().withMessage("ID must be a valid UUID"),
   body("email").isEmail().withMessage("Valid email is required"),
   body("password")
@@ -41,12 +42,12 @@ const validateSignup = [
     .withMessage("Invalid role"),
 ];
 
-const validateLogin = [
+export const validateLogin = [
   body("email").isEmail().withMessage("Valid email is required"),
   body("password").notEmpty().withMessage("Password is required"),
 ];
 
-const validate2FA = [
+export const validate2FA = [
   body("code")
     .isString()
     .isLength({ min: 6, max: 6 })
@@ -54,11 +55,11 @@ const validate2FA = [
   body("tempToken").notEmpty().withMessage("Temporary token is required"),
 ];
 
-const validateRefreshToken = [
+export const validateRefreshToken = [
   body("token").notEmpty().withMessage("Refresh token is required"),
 ];
 
-export async function signup(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const signup: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -93,7 +94,7 @@ export async function signup(req: AuthenticatedRequest, res: Response, next: Nex
       context: "authController.signup",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -103,9 +104,9 @@ export async function signup(req: AuthenticatedRequest, res: Response, next: Nex
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
-export async function login(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const login: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -117,7 +118,7 @@ export async function login(req: AuthenticatedRequest, res: Response, next: Next
       );
     }
 
-    const { email, password, deviceInfo } = req.body;
+    const { email, password, deviceInfo = "unknown" } = req.body;
     const result = await authService.loginUser(
       email,
       password,
@@ -127,7 +128,7 @@ export async function login(req: AuthenticatedRequest, res: Response, next: Next
     logger.info({
       context: "authController.login",
       message: "Login initiated",
-      userId: result.data.user.id,
+      userId: result.data?.user?.id || "unknown",
       correlationId: req.correlationId,
     });
     return res.json(result as SuccessResponse);
@@ -139,7 +140,7 @@ export async function login(req: AuthenticatedRequest, res: Response, next: Next
       context: "authController.login",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -149,9 +150,9 @@ export async function login(req: AuthenticatedRequest, res: Response, next: Next
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
-export async function verify2FA(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const verify2FA: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -202,7 +203,7 @@ export async function verify2FA(req: AuthenticatedRequest, res: Response, next: 
       context: "authController.verify2FA",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -212,9 +213,9 @@ export async function verify2FA(req: AuthenticatedRequest, res: Response, next: 
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
-export async function refreshToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const refreshToken: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -242,7 +243,7 @@ export async function refreshToken(req: AuthenticatedRequest, res: Response, nex
       context: "authController.refreshToken",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -252,9 +253,9 @@ export async function refreshToken(req: AuthenticatedRequest, res: Response, nex
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
-export async function logout(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const logout: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { userId, refreshToken } = req.body;
     await authService.logoutDevice(userId, refreshToken, req.correlationId);
@@ -276,7 +277,7 @@ export async function logout(req: AuthenticatedRequest, res: Response, next: Nex
       context: "authController.logout",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -286,9 +287,9 @@ export async function logout(req: AuthenticatedRequest, res: Response, next: Nex
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
-export async function logoutAll(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const logoutAll: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.body;
     await authService.logoutAllDevices(userId, req.correlationId);
@@ -310,7 +311,7 @@ export async function logoutAll(req: AuthenticatedRequest, res: Response, next: 
       context: "authController.logoutAll",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -320,9 +321,9 @@ export async function logoutAll(req: AuthenticatedRequest, res: Response, next: 
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
-export async function requestPasswordReset(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const requestPasswordReset: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { email } = req.body;
     await authService.requestPasswordReset(email, req.correlationId);
@@ -344,7 +345,7 @@ export async function requestPasswordReset(req: AuthenticatedRequest, res: Respo
       context: "authController.requestPasswordReset",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -354,11 +355,11 @@ export async function requestPasswordReset(req: AuthenticatedRequest, res: Respo
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
-export async function googleCallback(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export const googleCallback: RequestHandler = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const user = req.user as { userId: string; email: string; role?: string }; // Align with AuthenticatedRequest
+    const user = req.user as { userId: string; email: string; role?: string };
     await authService.initiate2FA(user.userId, req.correlationId);
     const tempToken = jwt.sign(
       { userId: user.userId, type: "2fa", role: user.role },
@@ -388,7 +389,7 @@ export async function googleCallback(req: AuthenticatedRequest, res: Response, n
       context: "authController.googleCallback",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId: req.correlationId,
     });
     return res.status(error.status).json({
@@ -398,7 +399,7 @@ export async function googleCallback(req: AuthenticatedRequest, res: Response, n
       details: process.env.NODE_ENV === "development" ? error.details : undefined,
     } as ErrorResponse);
   }
-}
+};
 
 export const authMiddleware = {
   validateSignup,

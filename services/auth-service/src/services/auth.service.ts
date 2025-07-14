@@ -15,7 +15,7 @@ if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined in environment variables");
 }
 
-class ServiceError extends Error {
+export class ServiceError extends Error {
   constructor(
     public status: number,
     public error: string,
@@ -23,6 +23,7 @@ class ServiceError extends Error {
     public details?: string
   ) {
     super(error);
+    this.name = "ServiceError";
   }
 }
 
@@ -40,6 +41,7 @@ connectDB()
       context: "authService",
       error: "Failed to initialize database",
       details: err.message,
+      stack: err.stack,
     });
     process.exit(1);
   });
@@ -81,7 +83,7 @@ export async function registerUser(id: string, email: string, password: string, 
       context: "authService.registerUser",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       userId: id,
       correlationId,
     });
@@ -114,7 +116,7 @@ export async function updateUser(id: string, updates: { email_verified?: boolean
       context: "authService.updateUser",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       userId: id,
       correlationId,
     });
@@ -146,7 +148,7 @@ export async function signAccessToken(userId: string, correlationId?: string) {
       context: "authService.signAccessToken",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       userId,
       correlationId,
     });
@@ -165,12 +167,12 @@ export function signRefreshToken(userId: string, correlationId?: string) {
     });
     return token;
   } catch (err: any) {
-    const error = new ServiceError(500, "Failed to sign refresh token", "INTERNAL_SERVER_ERROR", err.message);
+    const error = err instanceof ServiceError ? err : new ServiceError(500, "Failed to sign refresh token", "INTERNAL_SERVER_ERROR", err.message);
     logger.error({
       context: "authService.signRefreshToken",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       userId,
       correlationId,
     });
@@ -197,7 +199,7 @@ export function verifyRefreshToken(refreshToken: string, correlationId?: string)
       context: "authService.verifyRefreshToken",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       correlationId,
     });
     throw error;
@@ -253,7 +255,7 @@ export async function loginUser(email: string, password: string, deviceInfo: str
       context: "authService.loginUser",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       email,
       correlationId,
     });
@@ -267,9 +269,18 @@ export async function initiate2FA(userId: string, correlationId?: string) {
       throw new ServiceError(400, "User ID is required", "INVALID_INPUT");
     }
 
+    if (!process.env.NOTIFICATION_SERVICE_URL) {
+      throw new ServiceError(500, "Notification service URL is not configured", "CONFIG_ERROR");
+    }
+
     const dbInstance = await getDB();
     const code = generate2FACode();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+    const user = await dbInstance("users").where({ id: userId }).select("email").first();
+    if (!user) {
+      throw new ServiceError(404, "User not found", "NOT_FOUND");
+    }
 
     await dbInstance("user_2fa_codes").where({ user_id: userId }).del();
     await dbInstance("user_2fa_codes").insert({
@@ -279,19 +290,57 @@ export async function initiate2FA(userId: string, correlationId?: string) {
     });
 
     try {
-      await axios.post(`${process.env.NOTIFICATION_SERVICE_URL}/api/notifications`, {
+      const response = await axios.post(
+        `${process.env.NOTIFICATION_SERVICE_URL}/api/notification/email`,
+        {
+          to: user.email,
+          subject: "Your 2FA Code",
+          message: `Your 2FA code is ${code}. It expires in 5 minutes.`,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt.sign({ service: "auth-service" }, JWT_SECRET, { expiresIn: "1h" })}`,
+          },
+          timeout: 10000,
+        }
+      );
+      logger.info({
+        context: "authService.initiate2FA",
+        message: "2FA notification sent successfully",
         userId,
-        type: "2fa",
-        content: `Your 2FA code is ${code}. It expires in 5 minutes.`,
+        email: user.email,
+        correlationId,
+        response: response.data,
       });
-    } catch (error: AxiosError | any) {
-      throw new ServiceError(500, "Failed to send 2FA notification", "NOTIFICATION_ERROR", error.message);
+    } catch (error: any) {
+      const errorDetails = error instanceof AxiosError
+        ? {
+            message: error.message,
+            code: error.code,
+            status: error.response?.status,
+            responseData: error.response?.data,
+            requestUrl: error.config?.url,
+            requestHeaders: error.config?.headers,
+          }
+        : { message: error.message, stack: error.stack };
+      logger.error({
+        context: "authService.initiate2FA",
+        error: "Failed to send 2FA notification",
+        errorCode: "NOTIFICATION_ERROR",
+        details: errorDetails,
+        userId,
+        email: user.email,
+        correlationId,
+      });
+      throw new ServiceError(500, "Failed to send 2FA notification", "NOTIFICATION_ERROR", JSON.stringify(errorDetails));
     }
 
     logger.info({
       context: "authService.initiate2FA",
       message: "2FA code generated and sent",
       userId,
+      email: user.email,
       correlationId,
     });
   } catch (err: any) {
@@ -300,7 +349,7 @@ export async function initiate2FA(userId: string, correlationId?: string) {
       context: "authService.initiate2FA",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       userId,
       correlationId,
     });
@@ -355,7 +404,7 @@ export async function verify2FA(userId: string, code: string, deviceInfo: string
       context: "authService.verify2FA",
       error: error.error,
       errorCode: error.errorCode,
-      details: error.details,
+      details: error.details || err.stack,
       userId,
       correlationId,
     });
@@ -393,7 +442,7 @@ export async function refreshAuthToken(refreshToken: string, correlationId?: str
       context: "authService.refreshAuthToken",
       error: error.error,
       errorCode: error.errorCode,
-      details: err.message,
+      details: error.details || err.stack,
       correlationId,
     });
     throw error;
@@ -423,7 +472,7 @@ export async function logoutDevice(userId: string, refreshToken: string, correla
       context: "authService.logoutDevice",
       error: error.error,
       errorCode: error.errorCode,
-      details: err.message,
+      details: error.details || err.stack,
       userId,
       correlationId,
     });
@@ -456,7 +505,7 @@ export async function logoutAllDevices(userId: string, correlationId?: string) {
       context: "authService.logoutAllDevices",
       error: error.error,
       errorCode: error.errorCode,
-      details: err.message,
+      details: error.details || err.stack,
       userId,
       correlationId,
     });
@@ -470,6 +519,10 @@ export async function requestPasswordReset(email: string, correlationId?: string
       throw new ServiceError(400, "Email is required", "INVALID_INPUT");
     }
 
+    if (!process.env.NOTIFICATION_SERVICE_URL) {
+      throw new ServiceError(500, "Notification service URL is not configured", "CONFIG_ERROR");
+    }
+
     const dbInstance = await getDB();
     const user = await dbInstance("users").where({ email }).first();
     if (!user) {
@@ -479,7 +532,7 @@ export async function requestPasswordReset(email: string, correlationId?: string
         email,
         correlationId,
       });
-      return; // Silent fail for security
+      return;
     }
 
     const token = crypto.randomBytes(32).toString("hex");
@@ -494,13 +547,40 @@ export async function requestPasswordReset(email: string, correlationId?: string
     });
 
     try {
-      await axios.post(`${process.env.NOTIFICATION_SERVICE_URL}/api/notifications`, {
-        userId: user.id,
-        type: "password_reset",
-        content: `Your password reset link: ${process.env.FRONTEND_URL}/reset-password?token=${token}`,
+      await axios.post(
+        `${process.env.NOTIFICATION_SERVICE_URL}/api/notifications`,
+        {
+          userId: user.id,
+          type: "password_reset",
+          content: `Your password reset link: ${process.env.FRONTEND_URL}/reset-password?token=${token}`,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // Add authentication header if required
+            // "Authorization": `Bearer ${process.env.NOTIFICATION_SERVICE_TOKEN}`,
+          },
+          timeout: 10000,
+        }
+      );
+    } catch (error: any) {
+      const errorDetails = error instanceof AxiosError
+        ? {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status,
+            code: error.code,
+          }
+        : { message: error.message, stack: error.stack };
+      logger.error({
+        context: "authService.requestPasswordReset",
+        error: "Failed to send password reset notification",
+        errorCode: "NOTIFICATION_ERROR",
+        details: errorDetails,
+        email,
+        correlationId,
       });
-    } catch (error: AxiosError | any) {
-      throw new ServiceError(500, "Failed to send password reset notification", "NOTIFICATION_ERROR", error.message);
+      throw new ServiceError(500, "Failed to send password reset notification", "NOTIFICATION_ERROR", JSON.stringify(errorDetails));
     }
 
     logger.info({
@@ -515,7 +595,7 @@ export async function requestPasswordReset(email: string, correlationId?: string
       context: "authService.requestPasswordReset",
       error: error.error,
       errorCode: error.errorCode,
-      details: err.message,
+      details: error.details || err.stack,
       email,
       correlationId,
     });

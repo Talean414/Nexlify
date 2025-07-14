@@ -79,13 +79,13 @@ app.use((err: Error, req: AuthenticatedRequest, res: Response, next: NextFunctio
   res.status(500).json(errorResponse);
 });
 
-// Start server
+// Start server (PostgreSQL + Knex only)
 connectDB()
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       logger.info({
         context: "main",
-        message: `Auth service running on http://localhost:${PORT}`,
+        message: `🚀 Auth service running on http://0.0.0.0:${PORT}`,
         environment: process.env.NODE_ENV,
       });
     });

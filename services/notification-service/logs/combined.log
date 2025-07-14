@@ -1,0 +1,28 @@
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-14T09:22:11.955Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-07-14T09:22:11.993Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-07-14T09:22:12.046Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-07-14T09:22:12.151Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-07-14T09:22:12.293Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-07-14T09:22:12.296Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-07-14T09:22:26.612Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-07-14T09:22:27.133Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-07-14T09:22:27.143Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-07-14T09:22:27.146Z"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Test 2FA","timestamp":"2025-07-14T09:23:23.336Z","to":"anexxtechnologies@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Test 2FA","timestamp":"2025-07-14T09:23:23.340Z","to":"anexxtechnologies@gmail.com"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Test 2FA","timestamp":"2025-07-14T09:26:04.251Z","to":"talean411@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Test 2FA","timestamp":"2025-07-14T09:26:04.260Z","to":"talean411@gmail.com"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-14T09:31:34.677Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-07-14T09:31:34.720Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-07-14T09:31:34.781Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-07-14T09:31:34.935Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-07-14T09:31:35.085Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-07-14T09:31:35.087Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-07-14T09:31:35.259Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-07-14T09:31:35.291Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-07-14T09:31:35.295Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-07-14T09:31:35.297Z"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:33:46.350Z","to":"anexxtechnologies@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:33:46.354Z","to":"anexxtechnologies@gmail.com"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:52:06.664Z","to":"anexxtechnologies@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:52:06.671Z","to":"anexxtechnologies@gmail.com"}
