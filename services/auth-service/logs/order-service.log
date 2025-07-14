@@ -13,3 +13,151 @@
   "context": "main",
   "environment": "development"
 }
+[2025-07-14 12:32:23] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-14 12:32:24] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-14 12:32:24] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-14 12:33:42] DEBUG [1d26dfdb-5302-4b2d-bc18-f102c1dbc45b]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-14 12:33:46] INFO [1d26dfdb-5302-4b2d-bc18-f102c1dbc45b]: 2FA notification sent successfully {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com",
+  "response": {
+    "success": true,
+    "info": {
+      "accepted": [
+        "anexxtechnologies@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 36700160",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 547,
+      "messageTime": 513,
+      "messageSize": 349,
+      "response": "250 2.0.0 OK  1752485626 5b1f17b1804b1-454dd43912dsm128379475e9.2 - gsmtp",
+      "envelope": {
+        "from": "josephngige411@gmail.com",
+        "to": [
+          "anexxtechnologies@gmail.com"
+        ]
+      },
+      "messageId": "<8500fbce-19ee-3ac8-61ff-6b2ff3a31938@gmail.com>"
+    }
+  }
+}
+[2025-07-14 12:33:46] INFO [1d26dfdb-5302-4b2d-bc18-f102c1dbc45b]: 2FA code generated and sent {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com"
+}
+[2025-07-14 12:33:46] INFO [1d26dfdb-5302-4b2d-bc18-f102c1dbc45b]: Login initiated, 2FA required {
+  "context": "authService.loginUser",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-14 12:33:46] INFO [1d26dfdb-5302-4b2d-bc18-f102c1dbc45b]: Login initiated {
+  "context": "authController.login",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-14 12:52:02] DEBUG [60aaedf8-2b06-4629-a6cc-c379b94755db]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-14 12:52:06] INFO [60aaedf8-2b06-4629-a6cc-c379b94755db]: 2FA notification sent successfully {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com",
+  "response": {
+    "success": true,
+    "info": {
+      "accepted": [
+        "anexxtechnologies@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 36700160",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 778,
+      "messageTime": 621,
+      "messageSize": 349,
+      "response": "250 2.0.0 OK  1752486726 5b1f17b1804b1-45611651008sm48932245e9.9 - gsmtp",
+      "envelope": {
+        "from": "josephngige411@gmail.com",
+        "to": [
+          "anexxtechnologies@gmail.com"
+        ]
+      },
+      "messageId": "<1dff94bb-ce44-f9a5-1d53-ff9b43e17504@gmail.com>"
+    }
+  }
+}
+[2025-07-14 12:52:06] INFO [60aaedf8-2b06-4629-a6cc-c379b94755db]: 2FA code generated and sent {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com"
+}
+[2025-07-14 12:52:06] INFO [60aaedf8-2b06-4629-a6cc-c379b94755db]: Login initiated, 2FA required {
+  "context": "authService.loginUser",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-14 12:52:06] INFO [60aaedf8-2b06-4629-a6cc-c379b94755db]: Login initiated {
+  "context": "authController.login",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-14 12:55:21] DEBUG [bec7251c-d2e3-4a31-93d1-241a4c17007b]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/2fa"
+}
+[2025-07-14 12:55:38] DEBUG [6a2234d3-fa81-4a3c-930a-af7217cf5e60]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/verify-2fa"
+}
+[2025-07-14 12:55:38] ERROR [unknown]: [object Object] 
+[2025-07-14 12:58:05] DEBUG [2c76c3fd-6cb9-495d-ae99-5b8f98dece4a]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/verify-2fa"
+}
+[2025-07-14 12:58:06] ERROR [unknown]: [object Object] 
+[2025-07-14 12:59:38] DEBUG [a407efbc-54c1-4ec2-936e-be651f2fb925]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/verify-2fa?tempToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDM2OGY3Yi02OWEyLTQ5ZTYtOGIxNS0yZGE2ZmVkNmEyNWYiLCJ0eXBlIjoiMmZhIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzUyNDg2NzI2LCJleHAiOjE3NTI0ODczMjZ9.0pkpCYPoCg2b8KuVEbDw7telhp1cjoPfMJpYAXRJq7g"
+}
+[2025-07-14 12:59:38] ERROR [unknown]: [object Object] 
+[2025-07-14 13:02:35] DEBUG [56309d21-4a47-4f46-bf40-07ab422c2862]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/verify-2fa"
+}
+[2025-07-14 13:02:35] ERROR [unknown]: [object Object] 

@@ -1,4 +1,4 @@
-import { Router, Response, NextFunction, RequestHandler } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "@shared/utils/auth/requireAuth";
 import * as authController from "../controllers/auth.controller";
 import passport from "passport";
@@ -10,11 +10,7 @@ import { authMiddleware } from "../controllers/auth.controller";
 const router = Router();
 
 // Middleware to add correlation ID
-router.use(((
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {
+router.use((req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   req.correlationId = uuidv4();
   logger.debug({
     context: "auth.route",
@@ -24,66 +20,63 @@ router.use(((
     correlationId: req.correlationId,
   });
   next();
-}) as RequestHandler);
+});
 
 /**
  * @route POST /api/auth/signup
  * @desc Register a new user
  * @access Public
  */
-router.post("/signup", authMiddleware.validateSignup, authController.signup as RequestHandler);
+router.post("/signup", authMiddleware.validateSignup, authController.signup);
 
 /**
  * @route POST /api/auth/login
  * @desc Login a user and initiate 2FA
  * @access Public
  */
-router.post("/login", authMiddleware.validateLogin, authController.login as RequestHandler);
+router.post("/login", authMiddleware.validateLogin, authController.login);
 
 /**
  * @route POST /api/auth/verify-2fa
  * @desc Verify 2FA code and issue tokens
  * @access Public
  */
-router.post("/verify-2fa", authMiddleware.validate2FA, authController.verify2FA as RequestHandler);
+router.post("/verify-2fa", authMiddleware.validate2FA, authController.verify2FA);
 
 /**
  * @route POST /api/auth/refresh
  * @desc Refresh access token
  * @access Public
  */
-router.post("/refresh", authMiddleware.validateRefreshToken, authController.refreshToken as RequestHandler);
+router.post("/refresh", authMiddleware.validateRefreshToken, authController.refreshToken);
 
 /**
  * @route POST /api/auth/logout
  * @desc Logout from a device
  * @access Authenticated
  */
-router.post("/logout", requireAuth, authController.logout as RequestHandler);
+router.post("/logout", requireAuth, authController.logout);
 
 /**
  * @route POST /api/auth/logout-all
  * @desc Logout from all devices
  * @access Authenticated
  */
-router.post("/logout-all", requireAuth, authController.logoutAll as RequestHandler);
+router.post("/logout-all", requireAuth, authController.logoutAll);
 
 /**
  * @route POST /api/auth/request-password-reset
  * @desc Request a password reset link
  * @access Public
  */
-router.post("/request-password-reset", authController.requestPasswordReset as RequestHandler);
+router.post("/request-password-reset", authController.requestPasswordReset);
 
 /**
  * @route GET /api/auth/google
  * @desc Initiate Google OAuth login
  * @access Public
  */
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }) as RequestHandler
-);
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 /**
  * @route GET /api/auth/google/callback
@@ -92,8 +85,8 @@ router.get(
  */
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login-failed" }) as RequestHandler,
-  authController.googleCallback as RequestHandler
+  passport.authenticate("google", { failureRedirect: "/login-failed" }),
+  authController.googleCallback
 );
 
 /**
@@ -106,11 +99,7 @@ router.patch(
   requireAuth,
   requireRole(["admin"]),
   authMiddleware.validateSignup,
-  (async (
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ) => {
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const { email_verified } = req.body;
@@ -140,7 +129,7 @@ router.patch(
         details: process.env.NODE_ENV === "development" ? error.details : undefined,
       });
     }
-  }) as RequestHandler
+  }
 );
 
 export default router;

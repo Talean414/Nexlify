@@ -1,13 +1,12 @@
-// src/routes/notification.route.ts
 import { Router } from "express";
-import {
-  sendEmailNotification,
-  sendSMSNotification,
-} from "../controllers/notification.controller";
+import { sendEmailNotification, sendSMSNotification, sendPushNotification } from "../controllers/notification.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
+import { rateLimitMiddleware } from "../middlewares/rateLimit.middleware";
 
 const router = Router();
 
-router.post("/email", sendEmailNotification);
-router.post("/sms", sendSMSNotification);
+router.post("/email", authMiddleware, rateLimitMiddleware, sendEmailNotification);
+router.post("/sms", authMiddleware, rateLimitMiddleware, sendSMSNotification);
+router.post("/push", authMiddleware, rateLimitMiddleware, sendPushNotification);
 
 export default router;

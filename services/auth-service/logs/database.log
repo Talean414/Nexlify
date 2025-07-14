@@ -4,3 +4,5 @@
 {"database":"nexlify_authentication","host":"127.0.0.1","level":"info","message":"✅ Database connection successful","timestamp":"2025-07-04 09:10:25","user":"mybudget_user"}
 {"database":"nexlify_authentication","host":"127.0.0.1","level":"info","message":"✅ Database connection successful","timestamp":"2025-07-06 18:00:40","user":"mybudget_user"}
 {"database":"nexlify_authentication","host":"127.0.0.1","level":"info","message":"✅ Database connection successful","timestamp":"2025-07-06 18:00:40","user":"mybudget_user"}
+{"database":"nexlify_authentication","environment":"development","host":"127.0.0.1","level":"info","message":"✅ Database connection successful","timestamp":"2025-07-14 12:32:24","user":"mybudget_user"}
+{"database":"nexlify_authentication","environment":"development","host":"127.0.0.1","level":"info","message":"✅ Database connection successful","timestamp":"2025-07-14 12:32:24","user":"mybudget_user"}

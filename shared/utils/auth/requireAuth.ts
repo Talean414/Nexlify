@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import { verify } from "jsonwebtoken";
 import { logger } from "../logging/logger";
 import { validate as isUUID } from "uuid";
@@ -12,7 +12,7 @@ export interface AuthenticatedRequest extends Request {
   correlationId?: string;
 }
 
-class AuthError extends Error {
+export class AuthError extends Error {
   constructor(
     public status: number,
     public error: string,
@@ -20,6 +20,7 @@ class AuthError extends Error {
     public details?: string
   ) {
     super(error);
+    this.name = "AuthError";
   }
 }
 
@@ -27,8 +28,9 @@ class AuthError extends Error {
  * Verifies an access token and returns the decoded payload
  * @param token - JWT token
  * @returns Decoded token payload
+ * @throws AuthError if verification fails
  */
-export function verifyAccessToken(token: string) {
+export function verifyAccessToken(token: string): { userId: string; email?: string; role?: string } {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is not defined");
   }
@@ -45,15 +47,8 @@ export function verifyAccessToken(token: string) {
 
 /**
  * Middleware to require authentication
- * @param req - Express request
- * @param res - Express response
- * @param next - Next function
  */
-export function requireAuth(
-  req: AuthenticatedRequest, // Use AuthenticatedRequest instead of Request
-  res: Response,
-  next: NextFunction
-): void | Response {
+export const requireAuth: RequestHandler = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
   const correlationId = req.correlationId || "unknown";
 
@@ -63,13 +58,13 @@ export function requireAuth(
       context: "requireAuth",
       error: error.error,
       errorCode: error.errorCode,
-      correlationId
+      correlationId,
     });
     return res.status(error.status).json({
       success: false,
       error: error.error,
       errorCode: error.errorCode,
-      details: process.env.NODE_ENV === "development" ? error.details : undefined
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
     });
   }
 
@@ -84,7 +79,7 @@ export function requireAuth(
     req.user = {
       userId: decoded.userId,
       email: decoded.email,
-      role: decoded.role
+      role: decoded.role,
     };
 
     logger.debug({
@@ -92,7 +87,7 @@ export function requireAuth(
       message: "User authenticated",
       userId: decoded.userId,
       role: decoded.role,
-      correlationId
+      correlationId,
     });
     next();
   } catch (err: any) {
@@ -102,24 +97,24 @@ export function requireAuth(
       error: error.error,
       errorCode: error.errorCode,
       details: error.details,
-      correlationId
+      correlationId,
     });
     return res.status(error.status).json({
       success: false,
       error: error.error,
       errorCode: error.errorCode,
-      details: process.env.NODE_ENV === "development" ? error.details : undefined
+      details: process.env.NODE_ENV === "development" ? error.details : undefined,
     });
   }
-}
+};
 
 /**
  * Middleware to restrict access to specific roles
  * @param roles - Allowed roles
  * @returns Middleware function
  */
-export function requireRole(roles: string[]) {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction): void | Response => {
+export function requireRole(roles: string[]): RequestHandler {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const correlationId = req.correlationId || "unknown";
     try {
       const role = req.user?.role;
@@ -131,7 +126,7 @@ export function requireRole(roles: string[]) {
         message: "Role authorized",
         userId: req.user?.userId,
         role,
-        correlationId
+        correlationId,
       });
       next();
     } catch (err: any) {
@@ -143,13 +138,13 @@ export function requireRole(roles: string[]) {
         details: error.details,
         userId: req.user?.userId,
         role: req.user?.role,
-        correlationId
+        correlationId,
       });
       return res.status(error.status).json({
         success: false,
         error: error.error,
         errorCode: error.errorCode,
-        details: process.env.NODE_ENV === "development" ? error.details : undefined
+        details: process.env.NODE_ENV === "development" ? error.details : undefined,
       });
     }
   };
