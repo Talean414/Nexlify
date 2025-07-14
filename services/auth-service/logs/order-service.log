@@ -161,3 +161,42 @@
   "url": "/verify-2fa"
 }
 [2025-07-14 13:02:35] ERROR [unknown]: [object Object] 
+[2025-07-14 17:09:47] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-14 17:09:49] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-14 17:09:49] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-14 17:11:35] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-14 17:11:36] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-14 17:11:37] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-14 17:22:26] DEBUG [e2f2da30-fffc-4552-914b-7a2a91fbed72]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-14 17:22:28] ERROR [unknown]: [object Object] 
+[2025-07-14 17:22:28] ERROR [unknown]: [object Object] 
+[2025-07-14 17:22:28] ERROR [unknown]: [object Object] 
+[2025-07-14 17:22:28] ERROR [unknown]: [object Object] 

@@ -4,7 +4,7 @@ const config: { [key: string]: Knex.Config } = {
   development: {
     client: 'pg',
     connection: {
-      host: '127.0.0.1',
+      host: '100.69.254.106',
       user: 'mybudget_user',
       password: 'talean',
       database: 'nexlify_authentication',

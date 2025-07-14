@@ -26,3 +26,5 @@
 {"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:33:46.354Z","to":"anexxtechnologies@gmail.com"}
 {"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:52:06.664Z","to":"anexxtechnologies@gmail.com"}
 {"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:52:06.671Z","to":"anexxtechnologies@gmail.com"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-14T14:16:56.909Z"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-14T14:21:40.228Z"}
