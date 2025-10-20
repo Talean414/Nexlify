@@ -1,26 +1,39 @@
-import express from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import type { Request } from 'express';
-import type { ProxyReqCallback } from 'http-proxy';
+import express, { Request, Response, NextFunction } from 'express';
+import { createProxyMiddleware, Options } from 'http-proxy-middleware';
+import { IncomingMessage, ServerResponse } from 'http';
 
 const router = express.Router();
 
-const modifyRequestBody: ProxyReqCallback = (proxyReq, req: Request) => {
-  if (req.body && Object.keys(req.body).length) {
-    const bodyData = JSON.stringify(req.body);
+// Log every request
+router.use((req: Request, res: Response, next: NextFunction) => {
+  console.log('📥 Reached auth route:', req.method, req.url);
+  next();
+});
 
-    proxyReq.setHeader('Content-Type', 'application/json');
-    proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
-    proxyReq.write(bodyData);
-  }
+// Extend the Options interface to include onError and logLevel
+interface CustomProxyOptions extends Options<IncomingMessage, ServerResponse<IncomingMessage>> {
+  onError?: (err: Error, req: Request, res: Response) => void;
+  logLevel?: string; // Add logLevel to the interface
+}
+
+// Proxy middleware options
+const proxyOptions: CustomProxyOptions = {
+  target: 'http://localhost:5001',
+  changeOrigin: true,
+  pathRewrite: { '^/api/auth': '/api/auth' },
+  selfHandleResponse: false, // Ensure proxy handles response
+  onError: (err: Error, req: Request, res: Response) => {
+    console.error('❌ Proxy error:', err.message);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Proxy error' });
+    }
+  },
+  logLevel: 'debug', // Now TypeScript recognizes logLevel
 };
 
-router.use('/', createProxyMiddleware({
-  target: 'http://localhost:5002',
-  changeOrigin: true,
-  pathRewrite: { '^/api/auth': '' },
-  selfHandleResponse: false,
-  onProxyReq: modifyRequestBody,
-}));
+// Create proxy
+const proxy = createProxyMiddleware(proxyOptions);
+
+router.use('/', proxy);
 
 export default router;

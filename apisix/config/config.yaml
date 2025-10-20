@@ -1,0 +1,28 @@
+# config/config.yaml
+deployment:
+  role: traditional
+  mode: standalone
+  config_provider: yaml
+
+apisix:
+  node_listen: 9080             # HTTP port
+  enable_admin: true
+  admin_key:
+    - name: "admin"
+      key: "admin"
+      role: admin
+
+  config_center: yaml
+
+plugins:
+  - prometheus
+  - cors
+  - jwt-auth
+  - key-auth
+  - rate-limit
+  - proxy-rewrite
+
+plugin_attr: {}
+nginx_config:
+  error_log: "logs/error.log"
+  access_log: "logs/access.log"

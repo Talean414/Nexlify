@@ -14,11 +14,11 @@ export const useAuth = () => {
         throw new Error(response.errorCode || 'Signup failed');
       }
       setLoading(false);
-      return response.data;
+      return response.data; // Return data for potential use (e.g., token)
     } catch (err: any) {
       setLoading(false);
-      setError(err.message);
-      throw err;
+      setError(err.message); // Ensure error is set for UI
+      throw err; // Re-throw for catch in page.tsx
     }
   };
 

@@ -200,3 +200,359 @@
 [2025-07-14 17:22:28] ERROR [unknown]: [object Object] 
 [2025-07-14 17:22:28] ERROR [unknown]: [object Object] 
 [2025-07-14 17:22:28] ERROR [unknown]: [object Object] 
+[2025-07-23 10:53:48] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-23 10:53:50] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-23 10:53:50] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-23 14:03:16] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-23 14:03:19] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-23 14:03:19] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-24 07:40:28] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-24 07:40:29] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-24 07:40:29] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-24 08:30:59] ERROR [unknown]: [object Object] 
+[2025-07-24 08:32:21] DEBUG [cd5f47bb-5e09-4df0-a09a-29184474bcfe]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-24 08:32:26] INFO [cd5f47bb-5e09-4df0-a09a-29184474bcfe]: 2FA notification sent successfully {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com",
+  "response": {
+    "success": true,
+    "info": {
+      "accepted": [
+        "anexxtechnologies@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 536,
+      "messageTime": 724,
+      "messageSize": 349,
+      "response": "250 2.0.0 OK  1753335145 ffacd0b85a97d-3b76fc605cfsm959570f8f.13 - gsmtp",
+      "envelope": {
+        "from": "josephngige411@gmail.com",
+        "to": [
+          "anexxtechnologies@gmail.com"
+        ]
+      },
+      "messageId": "<6cb67151-0526-b4d9-b39e-9e29c5ee7cf4@gmail.com>"
+    }
+  }
+}
+[2025-07-24 08:32:26] INFO [cd5f47bb-5e09-4df0-a09a-29184474bcfe]: 2FA code generated and sent {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com"
+}
+[2025-07-24 08:32:26] INFO [cd5f47bb-5e09-4df0-a09a-29184474bcfe]: Login initiated, 2FA required {
+  "context": "authService.loginUser",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-24 08:32:26] INFO [cd5f47bb-5e09-4df0-a09a-29184474bcfe]: Login initiated {
+  "context": "authController.login",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-24 08:41:43] ERROR [unknown]: [object Object] 
+[2025-07-24 08:57:51] ERROR [unknown]: [object Object] 
+[2025-07-24 09:04:28] ERROR [unknown]: [object Object] 
+[2025-07-24 09:05:35] DEBUG [3d48bf3e-6176-496c-aec6-86bb1bcc63cd]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-24 09:05:38] INFO [3d48bf3e-6176-496c-aec6-86bb1bcc63cd]: 2FA notification sent successfully {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com",
+  "response": {
+    "success": true,
+    "info": {
+      "accepted": [
+        "anexxtechnologies@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 440,
+      "messageTime": 663,
+      "messageSize": 349,
+      "response": "250 2.0.0 OK  1753337138 5b1f17b1804b1-458705c4fcfsm6529105e9.29 - gsmtp",
+      "envelope": {
+        "from": "josephngige411@gmail.com",
+        "to": [
+          "anexxtechnologies@gmail.com"
+        ]
+      },
+      "messageId": "<9a60a9db-80ad-b4e3-8bea-e583338d5bb0@gmail.com>"
+    }
+  }
+}
+[2025-07-24 09:05:38] INFO [3d48bf3e-6176-496c-aec6-86bb1bcc63cd]: 2FA code generated and sent {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com"
+}
+[2025-07-24 09:05:39] INFO [3d48bf3e-6176-496c-aec6-86bb1bcc63cd]: Login initiated, 2FA required {
+  "context": "authService.loginUser",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-24 09:05:39] INFO [3d48bf3e-6176-496c-aec6-86bb1bcc63cd]: Login initiated {
+  "context": "authController.login",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-24 09:16:20] ERROR [unknown]: [object Object] 
+[2025-07-24 09:20:32] ERROR [unknown]: [object Object] 
+[2025-07-24 09:38:29] ERROR [unknown]: [object Object] 
+[2025-07-24 09:41:14] DEBUG [9b16633a-5f82-446b-99b1-a374df27f1b3]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-24 09:41:17] INFO [9b16633a-5f82-446b-99b1-a374df27f1b3]: 2FA notification sent successfully {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com",
+  "response": {
+    "success": true,
+    "info": {
+      "accepted": [
+        "anexxtechnologies@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 448,
+      "messageTime": 654,
+      "messageSize": 349,
+      "response": "250 2.0.0 OK  1753339277 5b1f17b1804b1-458705c4d91sm7584195e9.23 - gsmtp",
+      "envelope": {
+        "from": "josephngige411@gmail.com",
+        "to": [
+          "anexxtechnologies@gmail.com"
+        ]
+      },
+      "messageId": "<05ed9b71-0902-343c-2fae-3ba9245abb46@gmail.com>"
+    }
+  }
+}
+[2025-07-24 09:41:17] INFO [9b16633a-5f82-446b-99b1-a374df27f1b3]: 2FA code generated and sent {
+  "context": "authService.initiate2FA",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f",
+  "email": "anexxtechnologies@gmail.com"
+}
+[2025-07-24 09:41:17] INFO [9b16633a-5f82-446b-99b1-a374df27f1b3]: Login initiated, 2FA required {
+  "context": "authService.loginUser",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-24 09:41:17] INFO [9b16633a-5f82-446b-99b1-a374df27f1b3]: Login initiated {
+  "context": "authController.login",
+  "userId": "b4368f7b-69a2-49e6-8b15-2da6fed6a25f"
+}
+[2025-07-29 10:42:00] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-29 10:42:03] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-29 10:42:03] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-29 10:49:43] DEBUG [a447a393-aa52-4233-9135-b7a92c297555]: Request received {
+  "context": "auth.route",
+  "method": "GET",
+  "url": "/login"
+}
+[2025-07-29 11:04:08] DEBUG [01080ecb-908f-4acc-b815-33630fb69e60]: Request received {
+  "context": "auth.route",
+  "method": "GET",
+  "url": "/login"
+}
+[2025-07-31 08:24:00] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-07-31 08:24:01] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-31 08:24:01] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-07-31 08:55:52] DEBUG [a1ec5ed6-ee54-4cbf-9298-97cc7d739dfc]: Request received {
+  "context": "auth.route",
+  "method": "GET",
+  "url": "/login"
+}
+[2025-07-31 08:56:51] DEBUG [7fbbc651-00ca-481f-89fa-bd3eb8e79d73]: Request received {
+  "context": "auth.route",
+  "method": "GET",
+  "url": "/login"
+}
+[2025-07-31 09:08:14] DEBUG [d487e047-2bb0-495a-abd1-5edb845af024]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-31 09:08:15] ERROR [unknown]: [object Object] 
+[2025-07-31 09:08:15] ERROR [unknown]: [object Object] 
+[2025-07-31 09:09:33] DEBUG [9d74589f-bfb4-47f9-8b31-4b3e1231caa7]: Request received {
+  "context": "auth.route",
+  "method": "POST",
+  "url": "/login"
+}
+[2025-07-31 09:09:38] INFO [9d74589f-bfb4-47f9-8b31-4b3e1231caa7]: 2FA notification sent successfully {
+  "context": "authService.initiate2FA",
+  "userId": "20e03454-1628-4d34-ad18-2c0aa8e1a359",
+  "email": "talean411@gmail.com",
+  "response": {
+    "success": true,
+    "info": {
+      "accepted": [
+        "talean411@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 800,
+      "messageTime": 1053,
+      "messageSize": 341,
+      "response": "250 2.0.0 OK  1753942178 5b1f17b1804b1-458953787a8sm51389715e9.14 - gsmtp",
+      "envelope": {
+        "from": "josephngige411@gmail.com",
+        "to": [
+          "talean411@gmail.com"
+        ]
+      },
+      "messageId": "<386baa9a-9e86-fb3c-233b-bc216e95e06f@gmail.com>"
+    }
+  }
+}
+[2025-07-31 09:09:38] INFO [9d74589f-bfb4-47f9-8b31-4b3e1231caa7]: 2FA code generated and sent {
+  "context": "authService.initiate2FA",
+  "userId": "20e03454-1628-4d34-ad18-2c0aa8e1a359",
+  "email": "talean411@gmail.com"
+}
+[2025-07-31 09:09:38] INFO [9d74589f-bfb4-47f9-8b31-4b3e1231caa7]: Login initiated, 2FA required {
+  "context": "authService.loginUser",
+  "userId": "20e03454-1628-4d34-ad18-2c0aa8e1a359"
+}
+[2025-07-31 09:09:38] INFO [9d74589f-bfb4-47f9-8b31-4b3e1231caa7]: Login initiated {
+  "context": "authController.login",
+  "userId": "20e03454-1628-4d34-ad18-2c0aa8e1a359"
+}
+[2025-08-05 06:37:31] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-08-05 06:37:32] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-08-05 06:37:32] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-08-08 07:04:05] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-08-08 07:04:05] ERROR [unknown]: [object Object] 
+[2025-08-08 07:15:33] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "sessionSecret": "set",
+  "authServiceUrl": "set",
+  "nodeEnv": "development",
+  "authServicePort": "5001"
+}
+[2025-08-08 07:15:33] INFO [unknown]: Database initialized for authentication service {
+  "context": "authService"
+}
+[2025-08-08 07:15:33] INFO [unknown]: 🚀 Auth service running on http://0.0.0.0:5001 {
+  "context": "main",
+  "environment": "development"
+}

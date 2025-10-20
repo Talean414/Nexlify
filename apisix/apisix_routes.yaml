@@ -1,0 +1,11 @@
+# routes/apisix_routes.yaml
+routes:
+  - uri: /hello
+    methods: [GET]
+    name: hello_route
+    plugins:
+      cors: {}
+    upstream:
+      type: roundrobin
+      nodes:
+        "httpbin.org:80": 1

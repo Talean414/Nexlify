@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s
+scrape_configs:
+  - job_name: 'nexlify-nginx'
+    static_configs:
+      - targets: ['nexlify-nginx:80']
+  - job_name: 'nexlify-fallback'
+    static_configs:
+      - targets: ['nexlify-fallback:8080']

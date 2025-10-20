@@ -1,22 +1,23 @@
 FROM node:18-alpine
 
-# Install pnpm
-RUN npm install -g pnpm
+# Use Alibaba/Taobao npm mirror for faster installs
+# Install pnpm globally from the mirror
+RUN npm install -g pnpm@latest
 
-# Create app dir
+# Set the working directory for the app
 WORKDIR /app
 
-# Copy the WHOLE monorepo
+# Copy the entire monorepo into the container
 COPY ../../ ./
 
-# Go into the auth service directory
+# Move into the auth service directory
 WORKDIR /app/services/auth
 
-# Install dependencies for this service
+# Install dependencies for the auth service
 RUN pnpm install
 
-# Expose the port
-EXPOSE 5002
+# Expose the auth service port
+EXPOSE 5001
 
-# Start in dev mode
+# Start the service in development mode
 CMD ["pnpm", "dev"]

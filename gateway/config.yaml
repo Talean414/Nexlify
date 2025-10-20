@@ -1,0 +1,33 @@
+apisix:
+  node_listen: 9080
+  admin:
+    admin_key:
+      - key: edd1c9f034335f136f87ad84b625c8f1
+        role: admin
+  enable_admin: true
+  enable_debug: true
+deployment:
+  role: traditional
+  role_traditional:
+    config_provider: yaml
+plugin_attr:
+  prometheus:
+    export_addr:
+      ip: "0.0.0.0"
+      port: 9091
+  jwt-auth:
+    enable: true
+    secret: "your-jwt-secret"
+  rate-limit:
+    enable: true
+  cors:
+    enable: true
+  http-logger:
+    enable: true
+    uri: "http://localhost:9090/log"
+    batch_max_size: 100
+  redis-cache:
+    enable: true
+    redis_host: "redis"
+    redis_port: 6379
+    redis_timeout: 1000

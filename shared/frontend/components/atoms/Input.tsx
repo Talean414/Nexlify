@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import { theme } from '../../../../../shared/frontend/theme';
+import { theme } from '@theme';
 
 interface InputProps {
   label: string;
@@ -22,7 +24,10 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <div className="flex flex-col">
-      <label htmlFor={name} className="text-sm font-medium text-platinum-600">
+      <label
+        htmlFor={name}
+        className="text-sm font-medium text-platinum-600"
+      >
         {label}
       </label>
       <input

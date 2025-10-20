@@ -1,0 +1,37 @@
+routes:
+  - id: auth-route
+    uri: /api/auth/*
+    methods: ["GET", "POST"]
+    upstream:
+      type: roundrobin
+      nodes:
+        "localhost:5001": 1
+    plugins:
+      jwt-auth: {}
+      rate-limit:
+        count: 1000
+        time_window: 60
+      cors: {}
+      path-rewrite:
+        regex: "^/api/auth/(.*)"
+        replacement: "/api/auth/$1"
+      redis-cache:
+        cache_ttl: 60
+  - id: order-route
+    uri: /api/orders/*
+    methods: ["GET", "POST", "PUT"]
+    upstream:
+      type: roundrobin
+      nodes:
+        "localhost:5002": 1
+    plugins:
+      jwt-auth: {}
+      rate-limit:
+        count: 500
+        time_window: 60
+      cors: {}
+      path-rewrite:
+        regex: "^/api/orders/(.*)"
+        replacement: "/api/orders/$1"
+      redis-cache:
+        cache_ttl: 60

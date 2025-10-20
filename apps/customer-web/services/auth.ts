@@ -31,40 +31,56 @@ interface PasswordResetResponse {
 
 export const signup = async (id: string, email: string, password: string, role: string): Promise<SignupResponse> => {
   try {
-    const response = await axios.post(endpoints.auth.register, { id, email, password, role });
+    const response = await axios.post(endpoints.auth.register, { id, email, password, role }, {
+      headers: { 'Content-Type': 'application/json' },
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+    });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.errorCode || 'Signup failed');
+    const errResponse = error.response?.data || {};
+    throw new Error(errResponse.errorCode || 'Signup failed');
   }
 };
 
 export const login = async (email: string, password: string, deviceInfo: string): Promise<LoginResponse> => {
   try {
-    const response = await axios.post(endpoints.auth.login, { email, password, deviceInfo });
+    const response = await axios.post(endpoints.auth.login, { email, password, deviceInfo }, {
+      headers: { 'Content-Type': 'application/json' },
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+    });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.errorCode || 'Login failed');
+    const errResponse = error.response?.data || {};
+    throw new Error(errResponse.errorCode || 'Login failed');
   }
 };
 
 export const verify2FA = async (userId: string, code: string, tempToken: string, deviceInfo: string): Promise<Verify2FAResponse> => {
   try {
-    const response = await axios.post(endpoints.auth.verify2FA, { code, tempToken, deviceInfo });
+    const response = await axios.post(endpoints.auth.verify2FA, { userId, code, tempToken, deviceInfo }, {
+      headers: { 'Content-Type': 'application/json' },
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+    });
     if (response.data.success) {
       localStorage.setItem('accessToken', response.data.data.accessToken);
       localStorage.setItem('refreshToken', response.data.data.refreshToken);
     }
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.errorCode || '2FA verification failed');
+    const errResponse = error.response?.data || {};
+    throw new Error(errResponse.errorCode || '2FA verification failed');
   }
 };
 
 export const requestPasswordReset = async (email: string): Promise<PasswordResetResponse> => {
   try {
-    const response = await axios.post(endpoints.auth.requestPasswordReset, { email });
+    const response = await axios.post(endpoints.auth.requestPasswordReset, { email }, {
+      headers: { 'Content-Type': 'application/json' },
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+    });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.errorCode || 'Password reset request failed');
+    const errResponse = error.response?.data || {};
+    throw new Error(errResponse.errorCode || 'Password reset request failed');
   }
 };

@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Styles */
+:root {
+  --color-background: #F9FAFB;
+  --font-inter: 'Inter', sans-serif;
+  --font-roboto: 'Roboto', sans-serif;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-inter);
+  background-color: var(--color-background);
+  color: #1F2937; /* black-600 */
+  scroll-behavior: smooth;
+}
+
+/* Links */
+a {
+  @apply text-green-600 hover:text-green-400 transition-all duration-200;
+  text-decoration: none;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold text-black-600;
+  font-family: var(--font-roboto);
+}
+
+/* Buttons */
+.button {
+  @apply inline-block px-6 py-3 rounded-xl font-semibold shadow transition-all duration-200;
+}
+
+.button-primary {
+  @apply bg-green-600 text-white hover:bg-green-400;
+  box-shadow: 0 10px 20px rgba(0, 255, 0, 0.2); /* shadow-custom */
+}
+
+.button-danger {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+input,
+textarea,
+select {
+  @apply border border-platinum-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-400;
+  font-family: var(--font-inter);
+  background-color: white;
+}
+
+/* Animations */
+.animated-pulse {
+  @apply animate-pulse;
+}
+
+.animated-bounce {
+  @apply animate-bounce;
+}

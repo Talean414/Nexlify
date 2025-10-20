@@ -1,0 +1,3 @@
+apisix:
+  port: 9080
+  enable_tls: false

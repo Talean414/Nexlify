@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  gateway-proxy:
+    image: quay.io/solo-io/gloo:1.15.9
+    container_name: gloo-edge
+    ports:
+      - "8080:8080"     # HTTP
+      - "8443:8443"     # HTTPS
+      - "19000:19000"   # Admin UI / Metrics
+    volumes:
+      - ./config:/home/gloo/config:ro
+    command:
+      - gateway
+    networks:
+      - gloo
+
+  httpbin:
+    image: kennethreitz/httpbin
+    container_name: httpbin
+    networks:
+      - gloo
+
+networks:
+  gloo:

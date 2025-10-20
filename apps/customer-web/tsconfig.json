@@ -1,17 +1,48 @@
 {
+  "extends": "../../tsconfig.base.json", // ✅ reference shared base if you're using it
   "compilerOptions": {
+    "baseUrl": ".", // 👈 base for local imports
+    "paths": {
+      "@atoms/*": [
+        "../../shared/frontend/components/atoms/*"
+      ],
+      "@molecules/*": [
+        "../../shared/frontend/components/molecules/*"
+      ],
+	  "@theme/*": [
+	  "../../shared/frontend/theme/*"
+	  ],
+	  "@theme": [
+	  "../../shared/frontend/theme/index.ts"
+	  ],  //
+
+      "@hooks/*": [
+        "./hooks/*"
+      ],
+      "@services/*": [
+        "./services/*"
+      ],
+      "@styles/*": [
+        "./styles/*"
+      ],
+      "@i18n/*": [
+        "./i18n/*"
+      ],
+      "@config": [
+        "./config.ts"
+      ],
+      "@constants/*": [
+        "./constants/*"
+      ]
+    },
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
     "noEmit": true,
     "incremental": true,
-    "module": "esnext",
-    "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,

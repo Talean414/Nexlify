@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTranslation } from 'next-i18n';
-import FormWrapper from '../../../../shared/frontend/components/molecules/FormWrapper';
-import Input from '../../../../shared/frontend/components/atoms/Input';
-import Button from '../../../../shared/frontend/components/atoms/Button';
-import { useAuth } from '../../hooks/useAuth';
-import { v4 as uuidv4 } from 'uuid';
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import FormWrapper from "@molecules/FormWrapper";
+import Input from "@atoms/Input";
+import Button from "@atoms/Button";
+import { useAuth } from "../../../hooks/useAuth";
+import { v4 as uuidv4 } from "uuid";
 
 const SignupPage: React.FC = () => {
-  const { t } = useTranslation('auth');
+  const t = useTranslations('auth');
   const router = useRouter();
   const { signup, loading, error } = useAuth();
   const [formData, setFormData] = useState({
-    id: uuidv4(),
+    id: uuidv4(), // Ensure id is always generated
     email: '',
     password: '',
     confirmPassword: '',
@@ -50,10 +52,11 @@ const SignupPage: React.FC = () => {
       return;
     }
     try {
-      await signup(formData.id, formData.email, formData.password, formData.role);
+      const response = await signup(formData.id, formData.email, formData.password, formData.role);
+      console.log('Signup successful, response:', response);
       router.push(formData.role === 'vendor' ? '/auth/verify-email' : '/dashboard');
     } catch (err: any) {
-      console.error(err);
+      console.error('Signup error:', err.message);
     }
   };
 
@@ -63,7 +66,11 @@ const SignupPage: React.FC = () => {
 
   return (
     <FormWrapper title={t('signup')}>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-black bg-opacity-90 p-8 rounded-xl shadow-2xl">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-platinum-600 mb-4 animate-pulse">Join the Delivery Revolution</h1>
+          <p className="text-platinum-300 text-sm">Become a Customer, Vendor, or Courier with us!</p>
+        </div>
         <Input
           label={t('email')}
           name="email"
@@ -72,6 +79,7 @@ const SignupPage: React.FC = () => {
           onChange={handleChange}
           required
           placeholder={t('emailPlaceholder')}
+          className="bg-platinum-100 border-green-600 focus:ring-green-500"
         />
         <Input
           label={t('password')}
@@ -81,13 +89,14 @@ const SignupPage: React.FC = () => {
           onChange={handleChange}
           required
           placeholder={t('passwordPlaceholder')}
+          className="bg-platinum-100 border-green-600 focus:ring-green-500"
         />
-        <div className="h-2 bg-gray-200 rounded">
+        <div className="h-2 bg-platinum-300 rounded-full overflow-hidden">
           <div
-            className={`h-full rounded transition-all duration-300 ${
-              passwordStrength <= 25 ? 'bg-red-500' :
-              passwordStrength <= 50 ? 'bg-orange-500' :
-              passwordStrength <= 75 ? 'bg-yellow-500' : 'bg-green-500'
+            className={`h-full rounded-full transition-all duration-500 ${
+              passwordStrength <= 25 ? 'bg-red-600' :
+              passwordStrength <= 50 ? 'bg-yellow-500' :
+              passwordStrength <= 75 ? 'bg-green-400' : 'bg-green-600'
             }`}
             style={{ width: `${passwordStrength}%` }}
           />
@@ -100,9 +109,10 @@ const SignupPage: React.FC = () => {
           onChange={handleChange}
           required
           placeholder={t('confirmPasswordPlaceholder')}
+          className="bg-platinum-100 border-green-600 focus:ring-green-500"
         />
         <div className="flex flex-col">
-          <label htmlFor="role" className="text-sm font-medium text-platinum-600">
+          <label htmlFor="role" className="text-sm font-semibold text-platinum-600">
             {t('role')}
           </label>
           <select
@@ -110,41 +120,41 @@ const SignupPage: React.FC = () => {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="mt-1 p-2 border border-platinum-300 rounded-md focus:ring-2 focus:ring-red-500"
+            className="mt-2 p-3 border border-platinum-300 rounded-lg bg-platinum-100 focus:ring-2 focus:ring-red-600"
           >
-            <option value="customer">{t('customer')}</option>
-            <option value="vendor">{t('vendor')}</option>
-            <option value="courier">{t('courier')}</option>
+            <option value="customer" className="text-black">{t('customer')}</option>
+            <option value="vendor" className="text-black">{t('vendor')}</option>
+            <option value="courier" className="text-black">{t('courier')}</option>
           </select>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center space-x-2">
           <input
             type="checkbox"
             name="agreeTerms"
             checked={formData.agreeTerms}
             onChange={handleChange}
-            className="h-4 w-4 text-red-600 border-gray-300 rounded"
+            className="h-5 w-5 text-red-600 border-platinum-300 rounded focus:ring-red-500"
           />
-          <label className="ml-2 text-sm text-platinum-600">
+          <label className="text-sm text-platinum-300">
             {t('agreeTerms')}
           </label>
         </div>
         {error && (
-          <p className="text-red-500 text-sm">
+          <p className="text-red-600 text-sm text-center animate-bounce">
             {error === 'EMAIL_EXISTS' ? t('emailExists') : t('signupError')}
           </p>
         )}
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="w-full bg-green-600 text-white hover:bg-green-700">
           {loading ? t('signingUp') : t('signup')}
         </Button>
         <div className="flex justify-center space-x-4">
-          <Button variant="outline" onClick={handleGoogleSignup}>
+          <Button variant="outline" onClick={handleGoogleSignup} className="w-full border-green-600 text-green-600 hover:bg-green-50">
             {t('googleSignup')}
           </Button>
         </div>
-        <p className="text-center text-sm text-platinum-600">
+        <p className="text-center text-sm text-platinum-300">
           {t('haveAccount')}{' '}
-          <a href="/auth/login" className="text-red-600 hover:underline">
+          <a href="/auth/login" className="text-red-600 hover:text-red-700 font-medium">
             {t('login')}
           </a>
         </p>

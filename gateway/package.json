@@ -1,0 +1,14 @@
+{
+  "name": "nexlify-gateway",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node fallback.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^2.0.9",
+    "jsonwebtoken": "^9.0.2",
+    "redis": "^4.7.1",
+    "cors": "^2.8.5"
+  }
+}

@@ -33,3 +33,33 @@
   "context": "main",
   "environment": "development"
 }
+[2025-07-29 10:24:36] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-29 10:24:36] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-29 10:32:03] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-29 10:32:03] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}
+[2025-07-29 10:42:03] INFO [unknown]: Environment variables loaded {
+  "context": "main",
+  "jwtSecret": "set",
+  "refreshTokenSecret": "set",
+  "nodeEnv": "development"
+}
+[2025-07-29 10:42:03] INFO [unknown]: Order service running on port 5006 {
+  "context": "main",
+  "environment": "development"
+}

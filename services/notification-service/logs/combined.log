@@ -28,3 +28,72 @@
 {"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-14T09:52:06.671Z","to":"anexxtechnologies@gmail.com"}
 {"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-14T14:16:56.909Z"}
 {"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-14T14:21:40.228Z"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-23T07:53:45.835Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-07-23T07:53:45.854Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-07-23T07:53:45.878Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-07-23T07:53:45.902Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-07-23T07:53:46.028Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-07-23T07:53:46.579Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-07-23T07:53:46.686Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-07-23T07:53:46.711Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-07-23T07:53:46.714Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-07-23T07:53:46.716Z"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-23T11:03:22.737Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-07-23T11:03:22.784Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-07-23T11:03:22.821Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-07-23T11:03:22.914Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-07-23T11:03:23.026Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-07-23T11:03:23.558Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-07-23T11:03:23.640Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-07-23T11:03:23.663Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-07-23T11:03:23.771Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-07-23T11:03:23.772Z"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-24T04:40:31.752Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-07-24T04:40:31.863Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-07-24T04:40:31.880Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-07-24T04:40:31.979Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-07-24T04:40:32.191Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-07-24T04:40:32.418Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-07-24T04:40:32.522Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-07-24T04:40:32.530Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-07-24T04:40:32.628Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-07-24T04:40:32.629Z"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-24T05:32:26.095Z","to":"anexxtechnologies@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-24T05:32:26.096Z","to":"anexxtechnologies@gmail.com"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-24T06:05:38.966Z","to":"anexxtechnologies@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-24T06:05:38.967Z","to":"anexxtechnologies@gmail.com"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-24T06:41:17.513Z","to":"anexxtechnologies@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-24T06:41:17.514Z","to":"anexxtechnologies@gmail.com"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-07-31T05:24:02.625Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-07-31T05:24:02.735Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-07-31T05:24:02.760Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-07-31T05:24:02.857Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-07-31T05:24:04.429Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-07-31T05:24:04.430Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-07-31T05:24:06.650Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-07-31T05:24:06.692Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-07-31T05:24:06.935Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-07-31T05:24:06.938Z"}
+{"context":"emailService.sendEmail","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-31T06:09:38.293Z","to":"talean411@gmail.com"}
+{"context":"notificationController.sendEmailNotification","correlationId":"unknown","level":"info","message":"Email sent successfully","subject":"Your 2FA Code","timestamp":"2025-07-31T06:09:38.294Z","to":"talean411@gmail.com"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-08-05T03:37:34.450Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-08-05T03:37:34.572Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-08-05T03:37:34.599Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-08-05T03:37:34.695Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-08-05T03:37:36.771Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-08-05T03:37:36.773Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-08-05T03:37:39.328Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-08-05T03:37:39.357Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-08-05T03:37:39.361Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-08-05T03:37:39.363Z"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-08-08T04:04:10.410Z"}
+{"context":"metrics","level":"info","message":"Prometheus metrics initialized","timestamp":"2025-08-08T04:15:37.375Z"}
+{"context":"tracing","level":"info","message":"OpenTelemetry tracing initialized","timestamp":"2025-08-08T04:15:37.388Z"}
+{"context":"notificationService","level":"info","message":"Notification service running on port 5005","timestamp":"2025-08-08T04:15:37.406Z"}
+{"context":"redis.connectRedis","level":"info","message":"Connected to Redis","timestamp":"2025-08-08T04:15:37.503Z"}
+{"context":"kafka.connectKafka","level":"info","message":"Connected to Kafka and ensured topics","timestamp":"2025-08-08T04:15:38.748Z"}
+{"context":"notificationService","level":"info","message":"Connected to database, Kafka, and Redis","timestamp":"2025-08-08T04:15:39.853Z"}
+{"context":"authConsumer","level":"info","message":"Auth consumer started","timestamp":"2025-08-08T04:15:41.157Z"}
+{"context":"orderConsumer","level":"info","message":"Order consumer started","timestamp":"2025-08-08T04:15:41.207Z"}
+{"context":"courierConsumer","level":"info","message":"Courier consumer started","timestamp":"2025-08-08T04:15:41.211Z"}
+{"context":"consumers","level":"info","message":"All Kafka consumers started","timestamp":"2025-08-08T04:15:41.212Z"}

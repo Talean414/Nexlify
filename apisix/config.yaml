@@ -1,0 +1,48 @@
+apisix:
+  node_listen: 9080
+  enable_admin: true
+  enable_debug: false  # Disable debug in production
+
+  admin:
+    admin_key:
+      - name: "admin"
+        key: "edd1c9f034335f136f87ad84b625c8f1"
+        role: admin
+
+  allow_admin:
+    - 0.0.0.0/0  # ⚠️ Allow all for testing — tighten in prod
+
+  config_center: etcd
+
+etcd:
+  host:
+    - "http://etcd:2379"
+  prefix: "/apisix"
+
+plugins:
+  - prometheus
+  - jwt-auth
+  - cors
+  - rate-limit
+  - http-logger
+
+plugin_attr:
+  prometheus:
+    export_addr:
+      ip: "0.0.0.0"
+      port: 9091
+
+  jwt-auth:
+    enable: true
+    secret: "98387866e04f33120205b7dca4ba374df7bfdbb55d8273fa036ce84f87cec4ca"
+
+  rate-limit:
+    enable: true
+
+  cors:
+    enable: true
+
+  http-logger:
+    enable: true
+    uri: "http://logger-service/log"
+    batch_max_size: 100
